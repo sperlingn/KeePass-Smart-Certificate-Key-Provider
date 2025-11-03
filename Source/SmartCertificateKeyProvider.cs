@@ -109,12 +109,12 @@
             {
                 try
                 {
-                    if (certificate.PrivateKey is RSA rsa)
+                    using (RSACng rsaCng = certificate.GetRSAPrivateKey() as RSACng)
                     {
                         CertificateCache.StoreCachedValue(keyProviderQueryContext.DatabasePath, certificate.Thumbprint);
 
                         // Using HashAlgorithmName.SHA1 for backward compatibility
-                        return rsa.SignData(DataToSign, HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1); // DO NOT CHANGE THIS!!!!;
+                        return rsaCng.SignData(DataToSign, HashAlgorithmName.SHA1, RSASignaturePadding.Pkcs1); // DO NOT CHANGE THIS!!!!;
                     }
                 }
                 catch (Exception ex)
